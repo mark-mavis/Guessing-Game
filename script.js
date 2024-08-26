@@ -8,34 +8,42 @@ let gameOver = false;
 
 const checkBtn = document.querySelector('.check');
 const resetBtn = document.querySelector('.again');
-let guess = document.querySelector('.guess');
+
 let number = document.querySelector('.number');
 
 const displayMessage = (message) => {
     document.querySelector('.message').textContent = message;
 }
 
+const getUserInput = function(){
+    return Number(document.querySelector('.guess').value);
+}
+
 const resetSecretNum = () => {
     secretNumber = Math.floor(Math.random()*20)+1;
 }
+const resetCurrentScore = () => {
+    currentScore = 20;
+    document.querySelector('.score').textContent = currentScore;
+}
 
-const resetGame = () => {
+const resetGameState = () => {
     
-    resetSecretNum();
-
     //reset flags
     gameOver = false;
     win = false;
-    
-    //resent score
-    currentScore = 20;
-    document.querySelector('.score').textContent = currentScore;
 
     document.querySelector('.message').textContent = 'Start guessing...';
     document.querySelector('.number').textContent = '?';
     document.querySelector('.guess').value = '';
     document.querySelector('body').style.backgroundColor = '#222';
     document.querySelector('.number').style.width = '15rem';
+}
+
+const resetGame = () => {
+    resetSecretNum();
+    resetCurrentScore();
+    resetGameState()
 }
 
 const decrementScore = () =>{
@@ -84,7 +92,7 @@ const validateGuess = (guess) => {
 
 checkBtn.addEventListener('click', () => {
     if(!gameOver && !win){
-        let guessValue = guess.value
+        let guessValue = getUserInput();
         if(validGuess(guessValue)) {
             validateGuess(guessValue);
         }
