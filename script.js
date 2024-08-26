@@ -12,6 +12,51 @@ let guess = document.querySelector('.guess');
 let number = document.querySelector('.number');
 let message = document.querySelector('.message');
 
+const updateHighScore = () => {
+    //check for highscore update
+    if(currentScore > highScore){
+        highScore = currentScore;
+        document.querySelector('.highscore').textContent = highScore;
+    }
+}
+
+const resetGame = () => {
+    secretNumber = Math.floor(Math.random()*20)+1;
+    
+    //reset flags
+    gameOver = false;
+    win = false;
+    
+    //resent score
+    currentScore = 20;
+    document.querySelector('.score').textContent = currentScore;
+
+    document.querySelector('.message').textContent = 'Start guessing...';
+    document.querySelector('.number').textContent = '?';
+    document.querySelector('.guess').value = '';
+    document.querySelector('body').style.backgroundColor = '#222';
+    document.querySelector('.number').style.width = '15rem';
+}
+
+const setWinState = () => {
+    win = true;
+    gameOver = true;
+
+    if(currentScore === 20){
+        message.textContent = 'You Win with a perfect score!!!';
+    }else{
+        message.textContent = 'Correct!!';
+    }
+    //show secret number
+    document.querySelector('.number').textContent = secretNumber;
+    //change background to green
+    document.querySelector('body').style.backgroundColor = '#60b347';
+    //change number width
+    document.querySelector('.number').style.width = '30rem';
+
+    updateHighScore();
+}
+
 const updateScore = () =>{
     currentScore--;
     document.querySelector('.score').textContent = currentScore;
@@ -41,19 +86,7 @@ const validateGuess = (guess) => {
         message.textContent = 'Higher';
         updateScore();
     }else{
-        message.textContent = 'Correct!!';
-        //show secret number
-        document.querySelector('.number').textContent = secretNumber;
-        //change background to green
-        document.querySelector('body').style.backgroundColor = '#60b347';
-        //change number width
-        document.querySelector('.number').style.width = '30rem';
-        
-        //check for highscore update
-        if(currentScore > highScore){
-            highScore = currentScore;
-            document.querySelector('.highscore').textContent = highScore;
-        }
+        setWinState();
     }
 }
 
@@ -67,20 +100,6 @@ checkBtn.addEventListener('click', () => {
 });
 
 resetBtn.addEventListener('click', () => {
-    secretNumber = Math.floor(Math.random()*20)+1;
-    
-    //reset flags
-    gameOver = false;
-    win = false;
-    
-    //resent score
-    currentScore = 20;
-    document.querySelector('.score').textContent = currentScore;
-
-    document.querySelector('.message').textContent = 'Start guessing...';
-    document.querySelector('.number').textContent = '?';
-    document.querySelector('.guess').value = '';
-    document.querySelector('body').style.backgroundColor = '#222';
-    document.querySelector('.number').style.width = '15rem';
+    resetGame();
 });
 
